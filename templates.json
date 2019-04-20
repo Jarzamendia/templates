@@ -1,0 +1,52 @@
+[
+    {
+      "type": "stack",
+      "title": "Wordpress",
+      "description": "Wordpress setup with a MySQL database",
+      "note": "Deploys a Wordpress instance connected to a MySQL database.",
+      "categories": ["CMS"],
+      "platform": "linux",
+      "logo": "https://portainer-io-assets.sfo2.digitaloceanspaces.com/logos/wordpress.png",
+      "repository": {
+        "url": "https://github.com/portainer/templates",
+        "stackfile": "stacks/wordpress/docker-stack.yml"
+      },
+      "env": [
+        {
+          "name": "MYSQL_ROOT_PASSWORD",
+          "label": "Database root password",
+          "description": "Password used by the MySQL root user."
+        },
+        {
+          "name": "MYSQL_DATABASE",
+          "label": "Database for Wordpress",
+          "description": "Password used by the MySQL root user."
+        },
+        {
+          "name": "MYSQL_APP_USER",
+          "label": "Database app user",
+          "description": "USer used by the MySQL app user."
+        },
+        {
+          "name": "MYSQL_APP_PASSWORD",
+          "label": "Database app password",
+          "description": "Password used by the MySQL app user."
+        },
+        {
+          "name": "VOLUME_MYSQL",
+          "label": "Volume for MySQL",
+          "description": "Password used by the MySQL app user."
+        },
+        {
+          "name": "VOLUME_WORDPRESS",
+          "label": "Volume for Wordpress",
+          "description": "Password used by the MySQL app user."
+        },
+        {
+          "name": "DOMAIN",
+          "label": "Domain used to acess the Wordpress.",
+          "description": "Domain used to acess the Wordpress."
+        }
+      ]
+    }
+  ]

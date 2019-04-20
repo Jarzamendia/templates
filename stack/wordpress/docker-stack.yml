@@ -1,0 +1,66 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+       - db_data:/var/lib/mysql
+    networks:
+      - backend
+    environment:
+       MYSQL_ROOT_PASSWORD: ${MYSQL_DATABASE_PASSWORD}
+       MYSQL_DATABASE: ${MYSQL_DATABASE}
+       MYSQL_USER: ${MYSQL_APP_USER}
+       MYSQL_PASSWORD: ${MYSQL_APP_PASSWORD}
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 500M
+        reservations:
+          cpus: '0.1'
+          memory: 100M
+
+  wordpress:
+    image: wordpress:latest
+    volumes:
+       - db_data:/var/lib/mysql
+    networks:
+      - proxy_net
+      - backend
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_DB_USER: ${MYSQL_APP_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_APP_PASSWORD}
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 500M
+        reservations:
+          cpus: '0.1'
+          memory: 100M
+      labels:
+        - "traefik.frontend.entryPoints=http,https"
+        - "traefik.port=80"
+        - "traefik.backend=wordpress"
+        - "traefik.frontend.rule=Host:${DOMAIN}"
+        - "traefik.docker.network=proxy_net"
+
+volumes:
+    db_data:
+      external: true
+        name: ${VOLUME_MYSQL}
+    db_wordpress:
+      external: true
+        name: ${VOLUME_WORDPRESS}
+
+networks:
+  proxy_net:
+    external: true
+  backend:
